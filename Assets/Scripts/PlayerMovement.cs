@@ -43,23 +43,28 @@ public class PlayerMovement : MonoBehaviour
         if(Input.GetKey(KeyCode.Mouse0) && canJump)
         {
 
-            Vector2 dir = (mouseUpPos - mouseDownPos).normalized;
+            Vector2 dir = mouseDownPos - mouseUpPos;
             mouseUpPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
             GetComponent<IndicatorScript>().DrawIndicator(dir , strength);
 
 
         }
+        else
+        {
+            GetComponent<IndicatorScript>().DrawIndicator(Vector2.zero, 0);
+        }
 
 
 
-        grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundLayer);
+            grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundLayer);
 
         if (Input.GetKeyUp(KeyCode.Mouse0) && grounded && canJump)
         {
             Vector2 dir = (mouseUpPos - mouseDownPos).normalized;
             Jump(-dir * jumpSpeed * strength);
             StartCoroutine(BeginJumpCooldown(jumpCooldownTime));
+            
         }
 
     }
