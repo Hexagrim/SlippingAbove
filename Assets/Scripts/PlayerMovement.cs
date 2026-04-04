@@ -1,6 +1,7 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -15,9 +16,10 @@ public class PlayerMovement : MonoBehaviour
 
 
     Vector2 mouseUpPos, mouseDownPos;
-    bool canJump;
+    bool canJump = true;
     public float jumpCooldownTime;
 
+    public float maxDistance;
     private void Start()
     {
         softBodyRBs = GetComponentsInChildren<Rigidbody2D>();
@@ -31,14 +33,24 @@ public class PlayerMovement : MonoBehaviour
         //call this is for distance, i like making voids cause they are cleaner for this stuff but i guess making it a float thing is better;
         //CalcDistanceBetweenMouse();
 
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        //calcs the strenght which is like the distance between the mosue but like a slider, idk why im commenting ngl
+        float strength = Mathf.Clamp01(CalcDistanceBetweenMouse() / maxDistance);
+
+        if (Input.GetKeyDown(KeyCode.Mouse0) && canJump)
         {
             mouseDownPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
-        if(Input.GetKey(KeyCode.Mouse0))
+        if(Input.GetKey(KeyCode.Mouse0) && canJump)
         {
+
+            Vector2 dir = (mouseUpPos - mouseDownPos).normalized;
             mouseUpPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            GetComponent<IndicatorScript>().DrawIndicator(dir , strength);
+
+
         }
+
 
 
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundLayer);
@@ -46,7 +58,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Mouse0) && grounded && canJump)
         {
             Vector2 dir = (mouseUpPos - mouseDownPos).normalized;
-            Jump(dir * -1);
+            Jump(-dir * jumpSpeed * strength);
             StartCoroutine(BeginJumpCooldown(jumpCooldownTime));
         }
 
@@ -75,7 +87,7 @@ public class PlayerMovement : MonoBehaviour
     {
         foreach (Rigidbody2D rb in softBodyRBs)
         {
-            rb.AddForce(d * jumpSpeed);
+            rb.AddForce(d);
             BeginJumpCooldown(jumpCooldownTime);
         }
     }
