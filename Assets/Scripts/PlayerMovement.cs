@@ -27,6 +27,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (FindFirstObjectByType<GameUI>().escaped) return;
+
         //yea i need to call this so that the player moves slower in the ground cause of linear damping so they cant slide. pretty self explainatory
         SetFrictionOnGround();
 
