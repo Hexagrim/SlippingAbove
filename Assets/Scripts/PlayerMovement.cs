@@ -1,6 +1,7 @@
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class PlayerMovement : MonoBehaviour
@@ -26,6 +27,9 @@ public class PlayerMovement : MonoBehaviour
     public float OriginalFrequency;
 
     bool frLow = false;
+
+    public Image BarFill;
+
     private void Start()
     {
         softBodyRBs = GetComponentsInChildren<Rigidbody2D>();
@@ -47,7 +51,8 @@ public class PlayerMovement : MonoBehaviour
         //calcs the strenght which is like the distance between the mosue but like a slider, idk why im commenting ngl
         float strength = Mathf.Clamp01(CalcDistanceBetweenMouse() / maxDistance);
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && canJump)
+        BarFill.fillAmount = strength;
+        if (Input.GetKeyDown(KeyCode.Mouse0) && canJump && grounded)
         {
             mouseDownPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
