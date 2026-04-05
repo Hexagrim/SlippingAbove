@@ -27,6 +27,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+
+
         if (FindFirstObjectByType<GameUI>().escaped) return;
 
         //yea i need to call this so that the player moves slower in the ground cause of linear damping so they cant slide. pretty self explainatory
@@ -42,13 +44,13 @@ public class PlayerMovement : MonoBehaviour
         {
             mouseDownPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
-        if(Input.GetKey(KeyCode.Mouse0) && canJump)
+        if (Input.GetKey(KeyCode.Mouse0) && canJump)
         {
 
             Vector2 dir = mouseDownPos - mouseUpPos;
             mouseUpPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            GetComponent<IndicatorScript>().DrawIndicator(dir , strength);
+            GetComponent<IndicatorScript>().DrawIndicator(dir, strength);
 
 
         }
@@ -59,16 +61,23 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-            grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundLayer);
+        grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundLayer);
 
         if (Input.GetKeyUp(KeyCode.Mouse0) && grounded && canJump)
         {
             Vector2 dir = (mouseUpPos - mouseDownPos).normalized;
             Jump(-dir * jumpSpeed * strength);
             StartCoroutine(BeginJumpCooldown(jumpCooldownTime));
-            
+
         }
 
+
+        //here i will clamp velocity:
+
+        foreach(Rigidbody2D rb in softBodyRBs)
+        {
+            rb.linearVelocityY = Mathf.Clamp(rb.linearVelocityY, -22f, float.MaxValue);
+        }
     }
 
     void SetFrictionOnGround()
