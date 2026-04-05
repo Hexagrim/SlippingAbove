@@ -8,11 +8,12 @@ public class PlayerMovement : MonoBehaviour
 
     public float jumpSpeed;
     private Rigidbody2D[] softBodyRBs;
-
+    private SpringJoint2D[] softBodySprings;
     bool grounded;
     public Transform groundCheck;
     public float groundRadius;
     public LayerMask groundLayer;
+
 
 
     Vector2 mouseUpPos, mouseDownPos;
@@ -20,9 +21,15 @@ public class PlayerMovement : MonoBehaviour
     public float jumpCooldownTime;
 
     public float maxDistance;
+
+    public float KeyPressedFrequency;
+    public float OriginalFrequency;
+
+    bool frLow = false;
     private void Start()
     {
         softBodyRBs = GetComponentsInChildren<Rigidbody2D>();
+        softBodySprings = GetComponentsInChildren<SpringJoint2D>();
     }
 
     private void Update()
@@ -44,9 +51,12 @@ public class PlayerMovement : MonoBehaviour
         {
             mouseDownPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
-        if (Input.GetKey(KeyCode.Mouse0) && canJump)
+        if (Input.GetKey(KeyCode.Mouse0) && canJump && grounded)
         {
-
+            if (!frLow)
+            {
+                LowerFrequency();
+            }
             Vector2 dir = mouseDownPos - mouseUpPos;
             mouseUpPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -56,6 +66,10 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
+            if (frLow)
+            {
+                NormalFrequency();
+            }
             GetComponent<IndicatorScript>().DrawIndicator(Vector2.zero, 0);
         }
 
@@ -101,6 +115,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Jump(Vector2 d)
     {
+
         foreach (Rigidbody2D rb in softBodyRBs)
         {
             rb.AddForce(d);
@@ -124,5 +139,21 @@ public class PlayerMovement : MonoBehaviour
     float CalcDistanceBetweenMouse()
     {
         return Vector2.Distance(mouseUpPos, mouseDownPos);
+    }
+    void LowerFrequency()
+    {
+        frLow = true;
+        foreach(SpringJoint2D sj in softBodySprings)
+        {
+            sj.frequency = KeyPressedFrequency;
+        }
+    }
+    void NormalFrequency()
+    {
+        frLow = false;
+        foreach (SpringJoint2D sj in softBodySprings)
+        {
+            sj.frequency = OriginalFrequency;
+        }
     }
 }
