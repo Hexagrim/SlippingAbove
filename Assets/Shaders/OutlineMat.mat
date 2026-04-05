@@ -48,7 +48,7 @@ Material:
     - _Float: 0
     m_Colors:
     - White: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1.7207953, g: 1.7207953, b: 1.7207953, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &273680157435500399
