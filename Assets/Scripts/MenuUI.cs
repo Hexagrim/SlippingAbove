@@ -15,7 +15,12 @@ public class MenuUI : MonoBehaviour
     {
         
     }
-    public void Play()
+    public void NewGame()
+    {
+        PlayerPrefs.DeleteAll();
+        SceneManager.LoadSceneAsync(MainLevel);
+    }
+    public void Continue()
     {
         SceneManager.LoadSceneAsync(MainLevel);
     }
