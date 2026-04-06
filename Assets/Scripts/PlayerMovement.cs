@@ -90,9 +90,12 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.Mouse0) && grounded && canJump)
         {
+
+
             Vector2 dir = (mouseUpPos - mouseDownPos).normalized;
             Jump(-dir * jumpSpeed * strength , strength);
             StartCoroutine(BeginJumpCooldown(jumpCooldownTime));
+
 
         }
 
