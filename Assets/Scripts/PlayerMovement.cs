@@ -1,7 +1,9 @@
 using System.Collections;
-using Unity.VisualScripting;
+
 using UnityEngine;
+
 using UnityEngine.UI;
+
 using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class PlayerMovement : MonoBehaviour
@@ -30,10 +32,12 @@ public class PlayerMovement : MonoBehaviour
 
     public Image BarFill;
 
+    public bool onIce;
     private void Start()
     {
         softBodyRBs = GetComponentsInChildren<Rigidbody2D>();
         softBodySprings = GetComponentsInChildren<SpringJoint2D>();
+
     }
 
     private void Update()
@@ -43,7 +47,9 @@ public class PlayerMovement : MonoBehaviour
         if (FindFirstObjectByType<GameUI>().escaped) return;
 
         //yea i need to call this so that the player moves slower in the ground cause of linear damping so they cant slide. pretty self explainatory
-        SetFrictionOnGround();
+        
+        //check if we are on ICE
+        if(!onIce) SetFrictionOnGround();
 
         //call this is for distance, i like making voids cause they are cleaner for this stuff but i guess making it a float thing is better;
         //CalcDistanceBetweenMouse();

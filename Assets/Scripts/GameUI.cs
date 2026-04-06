@@ -10,7 +10,8 @@ public class GameUI : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     // Update is called once per frame
@@ -22,6 +23,8 @@ public class GameUI : MonoBehaviour
             {
                 MenuAnim.SetTrigger("pause");
                 escaped = true;
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
             }
         }
     }
@@ -32,6 +35,9 @@ public class GameUI : MonoBehaviour
     }
     public void Continue()
     {
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
         MenuAnim.SetTrigger("continue");
         if(!unpausing) StartCoroutine(NotPaused());
     }
