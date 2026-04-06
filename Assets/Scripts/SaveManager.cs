@@ -7,9 +7,7 @@ public class SaveManager : MonoBehaviour
     public GameObject MidBone;
     public TrailRenderer Tr;
     float timer;
-
-    public Image img1, img2;
-
+    public Toggle easyToggle;
     public bool easyMode;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -17,16 +15,19 @@ public class SaveManager : MonoBehaviour
         Tr.emitting = false;
         //this makes it so good instead of a big ahh line
         Player.transform.position = new Vector2(
-        PlayerPrefs.GetFloat("PlayerX", 0),
-        PlayerPrefs.GetFloat("PlayerY", 0)
+        PlayerPrefs.GetFloat("PlayerX", -107),
+        PlayerPrefs.GetFloat("PlayerY", -18)
         );
 
         easyMode = (PlayerPrefs.GetString("Easy", "Yes") == "Yes");
 
+        easyToggle.isOn = easyMode;
 
     }
     void Update()
     {
+        easyMode = easyToggle.isOn;
+
         //annoyed of coroutines, wanna switch it up a bit here ://
         timer += Time.deltaTime;
 
