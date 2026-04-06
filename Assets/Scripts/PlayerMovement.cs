@@ -52,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
         float strength = Mathf.Clamp01(CalcDistanceBetweenMouse() / maxDistance);
 
         BarFill.fillAmount = strength;
-        if (Input.GetKeyDown(KeyCode.Mouse0) && canJump && grounded)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && canJump)
         {
             mouseDownPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
