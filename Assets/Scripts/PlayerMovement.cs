@@ -85,7 +85,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Mouse0) && grounded && canJump)
         {
             Vector2 dir = (mouseUpPos - mouseDownPos).normalized;
-            Jump(-dir * jumpSpeed * strength);
+            Jump(-dir * jumpSpeed * strength , strength);
             StartCoroutine(BeginJumpCooldown(jumpCooldownTime));
 
         }
@@ -93,10 +93,10 @@ public class PlayerMovement : MonoBehaviour
 
         //here i will clamp velocity:
 
-        foreach(Rigidbody2D rb in softBodyRBs)
-        {
-            rb.linearVelocityY = Mathf.Clamp(rb.linearVelocityY, -22f, float.MaxValue);
-        }
+        //foreach(Rigidbody2D rb in softBodyRBs)
+        //{
+        //    rb.linearVelocityY = Mathf.Clamp(rb.linearVelocityY, -22f, float.MaxValue);
+        //}
     }
 
     void SetFrictionOnGround()
@@ -118,8 +118,9 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void Jump(Vector2 d)
+    void Jump(Vector2 d , float str)
     {
+        FindFirstObjectByType<CamShake>().Shake(5f * str, 0.15f);
 
         foreach (Rigidbody2D rb in softBodyRBs)
         {
